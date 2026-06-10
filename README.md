@@ -2,7 +2,6 @@
 
 A Bitcoin-forked blockchain with hybrid PoW/PoS consensus, Confidential Transactions, and an LLM-powered research synthesis engine.
 
-[![CI](https://github.com/bitchchain/bitchchain/actions/workflows/ci.yml/badge.svg)](https://github.com/bitchchain/bitchchain/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.11+](https://img.shields.io/badge/Python-3.11+-blue.svg)](https://python.org)
 
@@ -152,7 +151,8 @@ python -m agent.main benchmark --all --publish
 
 Bitchchain implements Confidential Transactions using Pedersen commitments:
 
-- **Commitment**: C = r*G + v*H where  is a random blinding factor and  is the value
+- **Commitment**: C = r*G + v*H where 
+ is a random blinding factor and  is the value
 - **Balance proof**: Sum of input commitments = Sum of output commitments + fee commitment
 - **Range proofs**: Each committed value is proven to be in [0, 2^64) using bit-decomposition
 - **Recipient decode**: Amount can be recovered by the recipient using the shared blinding factor
