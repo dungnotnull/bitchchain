@@ -1,0 +1,75 @@
+﻿# Python
+__pycache__/
+*.py[cod]
+*.class
+*.so
+*.egg-info/
+*.egg
+dist/
+build/
+eggs/
+.eggs/
+*.manifest
+*.spec
+pip-log.txt
+pip-delete-this-directory.txt
+.Python
+develop-eggs/
+
+# Virtual environments
+venv/
+.venv/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+coverage.xml
+
+# Type checking
+.mypy_cache/
+.pytype/
+
+# Database files (contain chain state and wallet data)
+*.db
+chain.db
+agent_memory.db
+
+# Environment and secrets
+.env
+.env.local
+.env.production
+
+# HuggingFace model cache
+models/
+
+# Logs
+logs/
+*.log
+
+# Docker volumes
+docker-data/
+
+# OS files
+Thumbs.db
+Desktop.ini
+
+# Project-specific
+SECOND-KNOWLEDGE-BRAIN.md
+!SECOND-KNOWLEDGE-BRAIN.md
+
+# Temporary files
+*.tmp
+*.bak
+*.swp
+temp/
+data/

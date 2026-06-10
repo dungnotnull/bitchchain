@@ -1,0 +1,69 @@
+node:
+  host: "0.0.0.0"
+  p2p_port: 8333
+  rpc_port: 8332
+  rpc_host: "127.0.0.1"
+  rpc_user: ""              # Set for RPC authentication
+  rpc_password: ""          # Set for RPC authentication
+  miner_address: ""          # Set to your BCC address to receive mining rewards
+  max_peers: 8
+  network: mainnet           # mainnet | testnet | regtest
+  dns_seeds:
+    - seed.bitchchain.example.com
+    - seed2.bitchchain.example.com
+
+storage:
+  chain_db: "data/chain.db"
+  agent_db: "data/agent_memory.db"
+  models_dir: "models"
+
+consensus:
+  mode: hybrid               # hybrid (PoW + PoS) | pow_only | pos_only
+  min_stake_bcc: 32          # Minimum validator stake (BCC)
+  finality_threshold: 0.667  # 2/3 supermajority of stake weight
+  checkpoint_interval: 100   # Blocks between finality checkpoints
+  pow_difficulty: mainnet    # mainnet | regtest (instant)
+  target_block_time_sec: 600
+
+blockchain:
+  max_block_size_mb: 4
+  coinbase_reward_bcc: 50
+  halving_interval: 210000
+  version: 1
+
+confidential_transactions:
+  enabled: true
+  range_proof: stub          # stub | bulletproof (Phase 3+)
+  require_range_proof: true
+
+llm:
+  primary_provider: claude
+  claude_model: claude-opus-4-8
+  openai_model: gpt-4o
+  ollama_model: llama3
+  max_tokens: 8192
+  retry_attempts: 3
+  retry_base_delay_sec: 1.0
+  # API keys loaded from environment variables:
+  # ANTHROPIC_API_KEY, OPENAI_API_KEY, OLLAMA_BASE_URL
+
+knowledge_updater:
+  enabled: true
+  schedule: "0 2 * * 0"     # Weekly Sunday 02:00 UTC
+  max_entries_per_run: 10
+  recency_window_days: 90
+  sources:
+    - arxiv:cs.CR
+    - arxiv:cs.DC
+    - semantic_scholar
+    - papers_with_code
+
+paths:
+  knowledge_brain: "SECOND-KNOWLEDGE-BRAIN.md"
+  logs: "logs/"
+
+logging:
+  level: INFO
+  file: "logs/bitchchain.log"
+  max_size_mb: 100
+  backup_count: 5

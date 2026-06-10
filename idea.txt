@@ -1,0 +1,1 @@
+Tạo mạng bitcoin blockchain mới với tên bitchchain bằng soft fork và hard fork với optimize khác biệt.

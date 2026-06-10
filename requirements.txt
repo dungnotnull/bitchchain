@@ -1,0 +1,34 @@
+# Bitchchain Blockchain Agent — Python Dependencies
+
+# ─── Core ─────────────────────────────────────────────────────────────────────
+pyyaml>=6.0
+python-dotenv>=1.0.0
+
+# ─── Cryptography ─────────────────────────────────────────────────────────────
+ecdsa>=0.18.0           # ECDSA signing for transactions
+
+# ─── LLM APIs ─────────────────────────────────────────────────────────────────
+anthropic>=0.34.0       # Claude API (primary LLM)
+openai>=1.40.0          # OpenAI API (fallback LLM)
+
+# ─── HuggingFace ──────────────────────────────────────────────────────────────
+transformers>=4.40.0    # BGE embedding + BART summarization pipelines
+torch>=2.2.0            # PyTorch backend (CPU or CUDA)
+sentence-transformers>=3.0.0  # BGE model loading helper
+
+# ─── Scheduling ───────────────────────────────────────────────────────────────
+APScheduler>=3.10.0     # Weekly research crawl scheduler
+
+# ─── RPC Server ───────────────────────────────────────────────────────────────
+aiohttp>=3.9.0          # Async HTTP server for JSON-RPC API
+
+# ─── Storage ──────────────────────────────────────────────────────────────────
+# sqlite3 is built-in to Python 3.x
+
+# ─── Testing ──────────────────────────────────────────────────────────────────
+pytest>=8.0.0
+pytest-asyncio>=0.23.0
+
+# ─── Optional: Web crawling ───────────────────────────────────────────────────
+# crawl4ai>=0.3.0       # Advanced web crawling (uncomment if needed)
+# requests>=2.31.0      # HTTP requests for API calls (stdlib urllib used instead)

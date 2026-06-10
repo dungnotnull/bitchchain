@@ -1,0 +1,115 @@
+version: "3.9"
+
+services:
+
+  # ─── Main blockchain node ──────────────────────────────────────────────────
+  bitchchain-node:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: bitchchain-node
+    restart: unless-stopped
+    environment:
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - OLLAMA_BASE_URL=${OLLAMA_BASE_URL:-http://ollama:11434}
+      - BITCHCHAIN_NETWORK=${BITCHCHAIN_NETWORK:-mainnet}
+      - BITCHCHAIN_MINER_ADDRESS=${BITCHCHAIN_MINER_ADDRESS:-}
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+    ports:
+      - "${BITCHCHAIN_P2P_PORT:-8333}:8333"    # P2P networking
+      - "${BITCHCHAIN_RPC_PORT:-8332}:8332"    # JSON-RPC API
+    volumes:
+      - chain-data:/app/data
+      - agent-data:/app/data
+      - models-cache:/app/models
+      - logs:/app/logs
+    command: ["python", "-m", "agent.main", "start-node"]
+    networks:
+      - bitchchain-net
+    healthcheck:
+      test: ["CMD", "python", "-m", "agent.main", "status"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # ─── Research agent (background knowledge crawler) ─────────────────────────
+  bitchchain-research:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: bitchchain-research
+    restart: unless-stopped
+    environment:
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - SEMANTIC_SCHOLAR_API_KEY=${SEMANTIC_SCHOLAR_API_KEY:-}
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+    volumes:
+      - chain-data:/app/data
+      - agent-data:/app/data
+      - models-cache:/app/models
+      - ../SECOND-KNOWLEDGE-BRAIN.md:/app/SECOND-KNOWLEDGE-BRAIN.md
+    command: ["python", "-c",
+      "import sys; sys.path.insert(0, '/app'); from tools.knowledge_updater import KnowledgeUpdater; KnowledgeUpdater().schedule_weekly()"]
+    networks:
+      - bitchchain-net
+    depends_on:
+      - bitchchain-node
+
+  # ─── Local Ollama (optional, for offline LLM) ─────────────────────────────
+  ollama:
+    image: ollama/ollama:latest
+    container_name: bitchchain-ollama
+    restart: unless-stopped
+    volumes:
+      - ollama-data:/root/.ollama
+    ports:
+      - "11434:11434"
+    networks:
+      - bitchchain-net
+    profiles:
+      - offline    # Start with: docker-compose --profile offline up
+
+  # ─── Second node (for 2-node testnet) ─────────────────────────────────────
+  bitchchain-node-2:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: bitchchain-node-2
+    restart: unless-stopped
+    environment:
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      - BITCHCHAIN_NETWORK=${BITCHCHAIN_NETWORK:-regtest}
+    ports:
+      - "8335:8333"
+      - "8334:8332"
+    volumes:
+      - chain-data-2:/app/data
+      - agent-data-2:/app/data
+    command: ["python", "-m", "agent.main", "start-node", "--regtest"]
+    networks:
+      - bitchchain-net
+    profiles:
+      - testnet    # Start with: docker-compose --profile testnet up
+
+volumes:
+  chain-data:
+    name: bitchchain_chain_data
+  chain-data-2:
+    name: bitchchain_chain_data_2
+  agent-data:
+    name: bitchchain_agent_data
+  agent-data-2:
+    name: bitchchain_agent_data_2
+  models-cache:
+    name: bitchchain_models_cache
+  logs:
+    name: bitchchain_logs
+  ollama-data:
+    name: bitchchain_ollama_data
+
+networks:
+  bitchchain-net:
+    name: bitchchain_network
+    driver: bridge
