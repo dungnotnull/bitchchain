@@ -73,3 +73,9 @@ SECOND-KNOWLEDGE-BRAIN.md
 *.swp
 temp/
 data/
+
+# Temporary helper scripts
+_fix_*.py
+_check.py
+_gen_*.py
+_write_*.py
